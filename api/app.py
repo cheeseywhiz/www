@@ -15,4 +15,4 @@ def index():
 
 @app.route('/api/id')
 def id():
-    return subprocess.run('id', capture_output=True).stdout.decode()
+    return subprocess.run('id', stdout=subprocess.PIPE).stdout.decode()
