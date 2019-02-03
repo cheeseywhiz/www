@@ -11,6 +11,11 @@ class DataclassJSONEncoder(flask.json.JSONEncoder):
         return super().default(obj)
 
 
-app = flask.Flask(__name__)
-app.json_encoder = DataclassJSONEncoder
-app.register_blueprint(api)
+class App(flask.Flask):
+    json_encoder = DataclassJSONEncoder
+
+
+def create_app():
+    app = App(__name__)
+    app.register_blueprint(api)
+    return app
