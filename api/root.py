@@ -8,13 +8,14 @@ import struct
 import time
 import typing
 import flask
+import auth
 
-__all__ = 'api'
-api = flask.Blueprint('api', __name__, url_prefix='/api')
+__all__ = 'root'
+root = flask.Blueprint('root', __name__, url_prefix='/api')
 libc = ctypes.CDLL('libc.so.6')
 
 
-@api.route('/time')
+@root.route('/time')
 def index():
     return flask.make_response(
         str(int(time.time())),
@@ -22,7 +23,8 @@ def index():
     )
 
 
-@api.route('/id')
+@root.route('/id')
+@auth.auth_required
 def id():
     user_data = pwd.getpwuid(os.getuid())
     group_data = grp.getgrgid(os.getgid())
@@ -97,6 +99,6 @@ class SysInfo(SysInfoBase):
         )
 
 
-@api.route('/sysinfo')
+@root.route('/sysinfo')
 def sysinfo():
     return flask.jsonify(SysInfo())
