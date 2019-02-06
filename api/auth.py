@@ -4,6 +4,7 @@ import os
 import click
 import flask
 import werkzeug.security
+import util
 
 __all__ = 'auth', 'init_app', 'auth_required'
 auth = flask.Blueprint('auth', __name__, url_prefix='/api/auth')
@@ -61,14 +62,14 @@ def login():
     password_hash = password_db.get(username)
 
     if password_hash is None:
-        return flask.make_response('bad username', 403)
+        return util.jsonify_status(403)(message='username not found')
 
     if not werkzeug.security.check_password_hash(password_hash, password):
-        return flask.make_response('bad password', 403)
+        return util.jsonify_status(403)(message='incorrect password')
 
     flask.session.clear()
     flask.session['username'] = username
-    return flask.make_response('success', 200)
+    return flask.jsonify(message=f'successfully logged in to user {username}')
 
 
 @auth.before_app_request
@@ -79,14 +80,17 @@ def load_logged_in_user():
 @auth.route('/logout', methods=('POST', ))
 def logout():
     flask.session.clear()
-    return flask.make_response('success', 200)
+    return flask.jsonify(message='successfully logged out')
 
 
 def auth_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if flask.g.username is None:
-            return flask.make_response('auth required', 403)
+            login_url = flask.url_for('auth.login')
+            return util.jsonify_status(403)(
+                message=f'login required at {login_url}',
+            )
 
         return view(**kwargs)
 
