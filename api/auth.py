@@ -7,7 +7,7 @@ import werkzeug.security
 import util
 
 __all__ = 'auth', 'init_app', 'auth_required'
-auth = flask.Blueprint('auth', __name__, url_prefix='/api/auth')
+auth = flask.Blueprint('auth', __name__, url_prefix='/auth')
 
 
 def open_passwd_db(mode='r'):

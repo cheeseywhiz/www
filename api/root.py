@@ -11,7 +11,7 @@ import flask
 import auth
 
 __all__ = 'root'
-root = flask.Blueprint('root', __name__, url_prefix='/api')
+root = flask.Blueprint('root', __name__, url_prefix='/')
 libc = ctypes.CDLL('libc.so.6')
 
 
