@@ -73,3 +73,23 @@ export function logout() {
             });
     };
 };
+
+export function logId() {
+    return (dispatch) => {
+        fetch('/api/id', {
+            credentials: 'same-origin',
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    response.json().then((json) => {
+                        const {message} = json;
+                        dispatch(loginFormSetError(message));
+                    });
+                    return;
+                }
+
+                return response.json();
+            })
+            .then((json) => json && console.log(JSON.stringify(json)));
+    };
+}
