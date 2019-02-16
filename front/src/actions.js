@@ -55,3 +55,21 @@ export function login(username, password) {
             });
     };
 };
+
+export function logout() {
+    return (dispatch) => {
+        fetch('/api/auth/logout', {
+            method: 'POST',
+            credentials: 'same-origin',
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    response.json().then((json) => {
+                        const {message} = json;
+                        dispatch(loginFormSetError(message));
+                    });
+                    return;
+                }
+            });
+    };
+};
