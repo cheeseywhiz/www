@@ -32,7 +32,8 @@ def create_app():
     if app.env == 'development':
         secret_key = 'development'
     elif secret_key is None:
-        raise RuntimeError('Environment variable APP_SECRET_KEY not set')
+        with app.open_instance_resource('secret_key') as f:
+            secret_key = f.read()
 
     app.config.from_mapping(
         SECRET_KEY=secret_key,
