@@ -31,6 +31,35 @@ export function loginFormSetError(error) {
     return {type, error};
 }
 
+class ApiError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = 'ApiError';
+    }
+}
+
+const checkApiError = (dispatch) => (response) => {
+    if (!response.ok) {
+        return response.json().then((json) => {
+            const {message} = json;
+            throw new ApiError(message);
+        });
+    }
+
+    dispatch(loginFormSetError(''));
+    return response;
+};
+
+const catchApiError = (dispatch) => (error) => {
+    switch (error.name) {
+        case 'ApiError':
+            dispatch(loginFormSetError(error.message));
+            break;
+        default:
+            break;
+    }
+};
+
 export function login(username, password) {
     return (dispatch) => {
         const form = new FormData();
@@ -41,18 +70,12 @@ export function login(username, password) {
             credentials: 'same-origin',
             body: form,
         })
+            .then(checkApiError(dispatch))
             .then((response) => {
-                if (!response.ok) {
-                    response.json().then((json) => {
-                        const {message} = json;
-                        dispatch(loginFormSetError(message));
-                    });
-                    return;
-                }
-
                 console.table(response);
                 dispatch(loginFormClear());
-            });
+            })
+            .catch(catchApiError(dispatch));
     };
 };
 
@@ -62,15 +85,8 @@ export function logout() {
             method: 'POST',
             credentials: 'same-origin',
         })
-            .then((response) => {
-                if (!response.ok) {
-                    response.json().then((json) => {
-                        const {message} = json;
-                        dispatch(loginFormSetError(message));
-                    });
-                    return;
-                }
-            });
+            .then(checkApiError(dispatch))
+            .catch(catchApiError(dispatch));
     };
 };
 
@@ -79,17 +95,9 @@ export function logId() {
         fetch('/api/id', {
             credentials: 'same-origin',
         })
-            .then((response) => {
-                if (!response.ok) {
-                    response.json().then((json) => {
-                        const {message} = json;
-                        dispatch(loginFormSetError(message));
-                    });
-                    return;
-                }
-
-                return response.json();
-            })
-            .then((json) => json && console.log(JSON.stringify(json)));
+            .then(checkApiError(dispatch))
+            .then((response) => response.json())
+            .then((json) => json && console.log(JSON.stringify(json)))
+            .catch(catchApiError(dispatch));
     };
 }
