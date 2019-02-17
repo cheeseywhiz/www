@@ -60,15 +60,12 @@ const catchApiError = (dispatch) => (error) => {
     }
 };
 
-export function login(username, password) {
+export function login(httpForm) {
     return (dispatch) => {
-        const form = new FormData();
-        form.append('username', username);
-        form.append('password', password);
         fetch('/api/auth/login', {
             method: 'POST',
             credentials: 'same-origin',
-            body: form,
+            body: httpForm,
         })
             .then(checkApiError(dispatch))
             .then((response) => {

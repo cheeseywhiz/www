@@ -3,22 +3,22 @@ import {connect} from 'react-redux';
 import * as actions from './actions.js';
 import UsernameEntry from './UsernameEntry.js';
 import PasswordEntry from './PasswordEntry.js';
+import selectors from './selectors.js';
 
-const mapStateToProps = ({loginForm}) => ({
-    username: loginForm.username,
-    password: loginForm.password,
+const mapStateToProps = (state) => ({
+    httpForm: selectors.loginForm.httpForm(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    onSubmit: (username, password) => (event) => {
+    onSubmit: (httpForm) => (event) => {
         event.preventDefault();
-        dispatch(actions.login(username, password));
+        dispatch(actions.login(httpForm));
     },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-    ({username, password, onSubmit}) => {
-        return <form onSubmit={onSubmit(username, password)}>
+    ({httpForm, onSubmit}) => {
+        return <form onSubmit={onSubmit(httpForm)}>
             <UsernameEntry />
             <PasswordEntry />
             <input type="submit" value="Submit" />
