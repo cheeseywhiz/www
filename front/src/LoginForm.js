@@ -7,6 +7,7 @@ import selectors from './selectors.js';
 
 const mapStateToProps = (state) => ({
     httpForm: selectors.loginForm.httpForm(state),
+    isLoggedIn: selectors.isLoggedIn(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -17,7 +18,11 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-    ({httpForm, onSubmit}) => {
+    ({httpForm, isLoggedIn, onSubmit}) => {
+        if (isLoggedIn) {
+            return null;
+        }
+
         return <form onSubmit={onSubmit(httpForm)}>
             <UsernameEntry />
             <PasswordEntry />

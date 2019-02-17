@@ -4,12 +4,13 @@ import selectors from './selectors.js';
 
 const mapStateToProps = (state) => ({
     loggedInUsername: selectors.loggedInUsername(state),
+    isLoggedIn: selectors.isLoggedIn(state),
 });
 
 export default connect(mapStateToProps)(
-    ({loggedInUsername}) => {
-        if (!loggedInUsername) {
-            return <code>Not logged in</code>;
+    ({loggedInUsername, isLoggedIn}) => {
+        if (!isLoggedIn) {
+            return null;
         }
 
         return <code>Logged in as {loggedInUsername}</code>

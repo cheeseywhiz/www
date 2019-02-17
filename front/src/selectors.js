@@ -24,6 +24,11 @@ const httpFormSelector = createSelector(
     }
 );
 
+const isLoggedInSelector = createSelector(
+    loggedInUsernameSelector,
+    (loggedInUsername) => Boolean(loggedInUsername)
+);
+
 export default {
     loginForm: {
         username: usernameSelector,
@@ -32,4 +37,5 @@ export default {
     },
     apiError: apiErrorSelector,
     loggedInUsername: loggedInUsernameSelector,
+    isLoggedIn: isLoggedInSelector,
 };
