@@ -95,3 +95,8 @@ def auth_required(view):
         return view(**kwargs)
 
     return wrapped_view
+
+
+@auth.route('/username')
+def user():
+    return flask.jsonify(username=flask.g.username)
