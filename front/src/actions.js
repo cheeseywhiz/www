@@ -2,13 +2,12 @@ export const types = {
     LOGIN_FORM_UPDATE_USERNAME: 'LOGIN_FORM_UPDATE_USERNAME',
     LOGIN_FORM_UPDATE_PASSWORD: 'LOGIN_FORM_UPDATE_PASSWORD',
     LOGIN_FORM_CLEAR: 'LOGIN_FORM_CLEAR',
-    LOGIN_FORM_SET_ERROR: 'LOGIN_FORM_SET_ERROR',
+    SET_API_ERROR: 'SET_API_ERROR',
 };
 
 export const defaultLoginForm = {
     username: '',
     password: '',
-    error: '',
 };
 
 export function loginFormUpdateUsername(username) {
@@ -26,8 +25,8 @@ export function loginFormClear() {
     return {type};
 };
 
-export function loginFormSetError(error) {
-    const type = types.LOGIN_FORM_SET_ERROR;
+export function setApiError(error) {
+    const type = types.SET_API_ERROR;
     return {type, error};
 }
 
@@ -46,14 +45,14 @@ const checkApiError = (dispatch) => (response) => {
         });
     }
 
-    dispatch(loginFormSetError(''));
+    dispatch(setApiError(''));
     return response;
 };
 
 const catchApiError = (dispatch) => (error) => {
     switch (error.name) {
         case 'ApiError':
-            dispatch(loginFormSetError(error.message));
+            dispatch(setApiError(error.message));
             break;
         default:
             break;

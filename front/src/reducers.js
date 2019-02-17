@@ -12,9 +12,15 @@ export function loginForm(state = defaultLoginForm, {type, ...action}) {
             return {...state, password};
         case types.LOGIN_FORM_CLEAR:
             return defaultLoginForm;
-        case types.LOGIN_FORM_SET_ERROR:
-            const {error} = action;
-            return {...state, error};
+        default:
+            return state;
+    }
+}
+
+export function apiError(state = '', {type, error}) {
+    switch (type) {
+        case types.SET_API_ERROR:
+            return error;
         default:
             return state;
     }

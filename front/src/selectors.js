@@ -1,6 +1,7 @@
 import {createSelector} from 'reselect';
 
-const loginFormSelector = (state) => state.loginForm;
+const loginFormSelector = ({loginForm}) => loginForm;
+const apiErrorSelector = ({apiError}) => apiError;
 
 const usernameSelector = createSelector(
     loginFormSelector,
@@ -10,11 +11,6 @@ const usernameSelector = createSelector(
 const passwordSelector = createSelector(
     loginFormSelector,
     ({password}) => password
-);
-
-const errorSelector = createSelector(
-    loginFormSelector,
-    ({error}) => error
 );
 
 const httpFormSelector = createSelector(
@@ -31,7 +27,7 @@ export default {
     loginForm: {
         username: usernameSelector,
         password: passwordSelector,
-        error: errorSelector,
         httpForm: httpFormSelector,
-    }
+    },
+    apiError: apiErrorSelector,
 };
