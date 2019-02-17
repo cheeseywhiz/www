@@ -3,6 +3,7 @@ export const types = {
     LOGIN_FORM_UPDATE_PASSWORD: 'LOGIN_FORM_UPDATE_PASSWORD',
     LOGIN_FORM_CLEAR: 'LOGIN_FORM_CLEAR',
     SET_API_ERROR: 'SET_API_ERROR',
+    SET_LOGGED_IN_USERNAME: 'SET_LOGGED_IN_USERNAME',
 };
 
 export const defaultLoginForm = {
@@ -28,6 +29,11 @@ export function loginFormClear() {
 export function setApiError(error) {
     const type = types.SET_API_ERROR;
     return {type, error};
+}
+
+export function setLoggedInUsername(username) {
+    const type = types.SET_LOGGED_IN_USERNAME;
+    return {type, username};
 }
 
 class ApiError extends Error {
@@ -70,6 +76,7 @@ export function login(httpForm) {
             .then((response) => {
                 console.table(response);
                 dispatch(loginFormClear());
+                dispatch(updateLoggedInUser());
             })
             .catch(catchApiError(dispatch));
     };
@@ -82,6 +89,7 @@ export function logout() {
             credentials: 'same-origin',
         })
             .then(checkApiError(dispatch))
+            .then(() => dispatch(updateLoggedInUser()))
             .catch(catchApiError(dispatch));
     };
 };
@@ -95,5 +103,26 @@ export function logId() {
             .then((response) => response.json())
             .then((json) => json && console.log(JSON.stringify(json)))
             .catch(catchApiError(dispatch));
+    };
+}
+
+export function updateLoggedInUser() {
+    return (dispatch) => {
+        fetch('/api/auth/username', {
+            credentials: 'same-origin',
+        })
+            .then(checkApiError(dispatch))
+            .then((response) => response.json())
+            .then((json) => {
+                const {username} = json;
+                dispatch(setLoggedInUsername(username));
+            })
+            .catch(catchApiError(dispatch));
+    };
+}
+
+export function init() {
+    return (dispatch) => {
+        dispatch(updateLoggedInUser());
     };
 }

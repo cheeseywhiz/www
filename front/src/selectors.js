@@ -2,6 +2,7 @@ import {createSelector} from 'reselect';
 
 const loginFormSelector = ({loginForm}) => loginForm;
 const apiErrorSelector = ({apiError}) => apiError;
+const loggedInUsernameSelector = ({loggedInUsername}) => loggedInUsername;
 
 const usernameSelector = createSelector(
     loginFormSelector,
@@ -30,4 +31,5 @@ export default {
         httpForm: httpFormSelector,
     },
     apiError: apiErrorSelector,
+    loggedInUsername: loggedInUsernameSelector,
 };

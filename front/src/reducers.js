@@ -25,3 +25,12 @@ export function apiError(state = '', {type, error}) {
             return state;
     }
 }
+
+export function loggedInUsername(state = null, {type, username}) {
+    switch (type) {
+        case types.SET_LOGGED_IN_USERNAME:
+            return username;
+        default:
+            return state;
+    }
+}
