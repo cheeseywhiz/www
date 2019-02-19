@@ -5,9 +5,9 @@ import * as actions from './actions.js';
 const mapStateToProps = (state) => ({});
 
 const mapDispatchToProps = (dispatch) => ({
-    onLogId: () => dispatch(actions.logId()),
+    onViewId: () => dispatch(actions.viewId()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-    ({onLogId}) => <input type="button" value="Log Id" onClick={onLogId} />
+    ({onViewId}) => <input type="button" value="View Id" onClick={onViewId} />
 );

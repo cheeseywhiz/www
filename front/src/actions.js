@@ -4,6 +4,7 @@ export const types = {
     LOGIN_FORM_CLEAR: 'LOGIN_FORM_CLEAR',
     SET_API_ERROR: 'SET_API_ERROR',
     SET_LOGGED_IN_USERNAME: 'SET_LOGGED_IN_USERNAME',
+    SET_PAYLOAD: 'SET_PAYLOAD',
 };
 
 export const defaultLoginForm = {
@@ -34,6 +35,11 @@ export function setApiError(error) {
 export function setLoggedInUsername(username) {
     const type = types.SET_LOGGED_IN_USERNAME;
     return {type, username};
+}
+
+export function setPayload(data) {
+    const type = types.SET_PAYLOAD;
+    return {type, data};
 }
 
 class ApiError extends Error {
@@ -94,14 +100,14 @@ export function logout() {
     };
 };
 
-export function logId() {
+export function viewId() {
     return (dispatch) => {
         fetch('/api/id', {
             credentials: 'same-origin',
         })
             .then(checkApiError(dispatch))
             .then((response) => response.json())
-            .then((json) => json && console.log(JSON.stringify(json)))
+            .then((json) => json && dispatch(setPayload(JSON.stringify(json))))
             .catch(catchApiError(dispatch));
     };
 }

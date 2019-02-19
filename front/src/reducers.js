@@ -34,3 +34,12 @@ export function loggedInUsername(state = null, {type, username}) {
             return state;
     }
 }
+
+export function payload(state = '', {type, data}) {
+    switch (type) {
+        case types.SET_PAYLOAD:
+            return data;
+        default:
+            return state;
+    }
+}

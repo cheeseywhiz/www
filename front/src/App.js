@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import LoginForm from './LoginForm.js';
 import LogoutButton from './LogoutButton.js';
-import LogIdButton from './LogIdButton.js';
+import ViewIdButton from './ViewIdButton.js';
 import ApiError from './ApiError.js';
 import LoggedInUsername from './LoggedInUsername.js';
+import Payload from './Payload.js';
 
 class App extends Component {
     render() {
@@ -12,8 +13,9 @@ class App extends Component {
                 <LoggedInUsername />
                 <LoginForm />
                 <LogoutButton />
-                <LogIdButton />
+                <ViewIdButton />
                 <ApiError />
+                <Payload />
             </div>
         );
     }
