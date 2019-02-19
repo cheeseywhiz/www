@@ -114,18 +114,6 @@ export function logout() {
     };
 };
 
-export function viewId() {
-    return (dispatch) => {
-        fetch('/api/id', {
-            credentials: 'same-origin',
-        })
-            .then(checkApiError(dispatch))
-            .then((response) => response.json())
-            .then((json) => json && dispatch(setPayload(JSON.stringify(json))))
-            .catch(catchApiError(dispatch));
-    };
-}
-
 export function updateEndpoint(value) {
     return (dispatch) => {
         dispatch(setEndpointSelection(value));
