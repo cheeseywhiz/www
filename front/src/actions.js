@@ -94,7 +94,6 @@ export function login(httpForm) {
         })
             .then(checkApiError(dispatch))
             .then((response) => {
-                console.table(response);
                 dispatch(loginFormClear());
                 dispatch(updateLoggedInUser());
             })
