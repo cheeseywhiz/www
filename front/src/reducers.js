@@ -1,5 +1,5 @@
 import {
-    types, defaultLoginForm,
+    types, defaultLoginForm, endpoints
 } from './actions.js';
 
 export function loginForm(state = defaultLoginForm, {type, ...action}) {
@@ -39,6 +39,15 @@ export function payload(state = '', {type, data}) {
     switch (type) {
         case types.SET_PAYLOAD:
             return data;
+        default:
+            return state;
+    }
+}
+
+export function endpointSelection(state = endpoints.NONE, {type, endpoint}) {
+    switch(type) {
+        case types.SET_ENDPOINT_SELECTION:
+            return endpoint;
         default:
             return state;
     }

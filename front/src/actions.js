@@ -5,6 +5,14 @@ export const types = {
     SET_API_ERROR: 'SET_API_ERROR',
     SET_LOGGED_IN_USERNAME: 'SET_LOGGED_IN_USERNAME',
     SET_PAYLOAD: 'SET_PAYLOAD',
+    SET_ENDPOINT_SELECTION: 'SET_ENDPOINT_SELECTION',
+};
+
+export const endpoints = {
+    NONE: 'EP_NONE',
+    ID: 'EP_ID',
+    TIME: 'EP_TIME',
+    SYSINFO: 'EP_SYSINFO',
 };
 
 export const defaultLoginForm = {
@@ -42,6 +50,11 @@ export function setPayload(data) {
     return {type, data};
 }
 
+export function setEndpointSelection(endpoint) {
+    const type = types.SET_ENDPOINT_SELECTION;
+    return {type, endpoint};
+}
+
 class ApiError extends Error {
     constructor(message) {
         super(message);
@@ -61,10 +74,11 @@ const checkApiError = (dispatch) => (response) => {
     return response;
 };
 
-const catchApiError = (dispatch) => (error) => {
+const catchApiError = (dispatch, then) => (error) => {
     switch (error.name) {
         case 'ApiError':
             dispatch(setApiError(error.message));
+            then && then();
             break;
         default:
             break;
@@ -109,6 +123,26 @@ export function viewId() {
             .then((response) => response.json())
             .then((json) => json && dispatch(setPayload(JSON.stringify(json))))
             .catch(catchApiError(dispatch));
+    };
+}
+
+export function updateEndpoint(value) {
+    return (dispatch) => {
+        dispatch(setEndpointSelection(value));
+        const uri= {
+            [endpoints.ID]: '/api/id',
+            [endpoints.TIME]: '/api/time',
+            [endpoints.SYSINFO]: '/api/sysinfo',
+        }[value];
+        fetch(uri, {
+            credentials: 'same-origin',
+        })
+            .then(checkApiError(dispatch))
+            .then((response) => response.json())
+            .then((json) => dispatch(setPayload(JSON.stringify(json))))
+            .catch(catchApiError(dispatch, () => {
+                dispatch(setPayload(''));
+            }));
     };
 }
 

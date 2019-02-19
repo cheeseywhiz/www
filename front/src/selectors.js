@@ -4,6 +4,7 @@ const loginFormSelector = ({loginForm}) => loginForm;
 const apiErrorSelector = ({apiError}) => apiError;
 const loggedInUsernameSelector = ({loggedInUsername}) => loggedInUsername;
 const payloadSelector = ({payload}) => payload;
+const endpointSelectionSelector = ({endpointSelection}) => endpointSelection;
 
 const usernameSelector = createSelector(
     loginFormSelector,
@@ -40,4 +41,5 @@ export default {
     loggedInUsername: loggedInUsernameSelector,
     isLoggedIn: isLoggedInSelector,
     payload: payloadSelector,
+    endpointSelection: endpointSelectionSelector,
 };
