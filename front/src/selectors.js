@@ -3,7 +3,15 @@ import {createSelector} from 'reselect';
 const loginFormSelector = ({loginForm}) => loginForm;
 const apiErrorSelector = ({apiError}) => apiError;
 const loggedInUsernameSelector = ({loggedInUsername}) => loggedInUsername;
-const payloadSelector = ({payload}) => payload;
+const payloadBaseSelector = ({payload}) => payload;
+const payloadSelector = createSelector(
+    payloadBaseSelector,
+    ({payload}) => payload,
+);
+payloadSelector.type = createSelector(
+    payloadBaseSelector,
+    ({type}) => type
+);
 const endpointSelectionSelector = ({endpointSelection}) => endpointSelection;
 
 const usernameSelector = createSelector(

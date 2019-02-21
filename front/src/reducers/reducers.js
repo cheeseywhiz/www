@@ -1,6 +1,8 @@
+import {combineReducers} from 'redux';
 import {
     types, defaultLoginForm, endpoints
-} from './actions.js';
+} from '../actions.js';
+import * as payload_reducers from './payload.js';
 
 export function loginForm(state = defaultLoginForm, {type, ...action}) {
     switch (type) {
@@ -35,15 +37,6 @@ export function loggedInUsername(state = null, {type, username}) {
     }
 }
 
-export function payload(state = '', {type, data}) {
-    switch (type) {
-        case types.SET_PAYLOAD:
-            return data;
-        default:
-            return state;
-    }
-}
-
 export function endpointSelection(state = endpoints.NONE, {type, endpoint}) {
     switch(type) {
         case types.SET_ENDPOINT_SELECTION:
@@ -52,3 +45,5 @@ export function endpointSelection(state = endpoints.NONE, {type, endpoint}) {
             return state;
     }
 }
+
+export const payload = combineReducers(payload_reducers);

@@ -45,9 +45,9 @@ export function setLoggedInUsername(username) {
     return {type, username};
 }
 
-export function setPayload(data) {
+export function setPayload(data, payload_type) {
     const type = types.SET_PAYLOAD;
-    return {type, data};
+    return {type, data, payload_type};
 }
 
 export function setEndpointSelection(endpoint) {
@@ -126,9 +126,9 @@ export function updateEndpoint(value) {
         })
             .then(checkApiError(dispatch))
             .then((response) => response.json())
-            .then((json) => dispatch(setPayload(JSON.stringify(json))))
+            .then((json) => dispatch(setPayload(JSON.stringify(json), value)))
             .catch(catchApiError(dispatch, () => {
-                dispatch(setPayload(''));
+                dispatch(setPayload('', endpoints.NONE));
             }));
     };
 }
