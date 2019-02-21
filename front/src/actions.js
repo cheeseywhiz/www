@@ -126,7 +126,7 @@ export function updateEndpoint(value) {
         })
             .then(checkApiError(dispatch))
             .then((response) => response.json())
-            .then((json) => dispatch(setPayload(JSON.stringify(json), value)))
+            .then((json) => dispatch(setPayload(json, value)))
             .catch(catchApiError(dispatch, () => {
                 dispatch(setPayload('', endpoints.NONE));
             }));
