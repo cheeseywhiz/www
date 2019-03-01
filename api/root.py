@@ -74,7 +74,7 @@ class Uptime:
 @dataclasses.dataclass
 class SysInfoBase:
     uptime: Uptime
-    loads: typing.Tuple[int, int, int]
+    loads: typing.Tuple[float, float, float]
     totalram: int
     freeram: int
     sharedram: int
@@ -82,20 +82,34 @@ class SysInfoBase:
     totalswap: int
     freeswap: int
     procs: int
+    totalhigh: int
+    freehigh: int
 
 
 class SysInfo(SysInfoBase):
     def __init__(self):
-        fmt = 'l3L6LH22s'
-        buf = ctypes.create_string_buffer(struct.calcsize(fmt) + 1)
+        fmt = 'l3L6LH2LI'
+        buf = ctypes.create_string_buffer(128)
         libc.sysinfo(buf)
         uptime_seconds, loads_1, loads_5, loads_15, totalram, freeram, \
-            sharedram, bufferram, totalswap, freeswap, procs, \
-            *padding = struct.unpack_from(fmt, buf.raw)
+            sharedram, bufferram, totalswap, freeswap, procs, totalhigh, \
+            freehigh, mem_unit = struct.unpack_from(fmt, buf.raw)
         uptime = Uptime.from_total_seconds(uptime_seconds)
+        totalram *= mem_unit
+        freeram *= mem_unit
+        sharedram *= mem_unit
+        bufferram *= mem_unit
+        totalswap *= mem_unit
+        freeswap *= mem_unit
+        totalhigh *= mem_unit
+        freehigh *= mem_unit
+        loads_1 /= 2 ** 16
+        loads_5 /= 2 ** 16
+        loads_15 /= 2 ** 16
         super().__init__(
             uptime, (loads_1, loads_5, loads_15), totalram, freeram,
-            sharedram, bufferram, totalswap, freeswap, procs,
+            sharedram, bufferram, totalswap, freeswap, procs, totalhigh,
+            freehigh,
         )
 
 
