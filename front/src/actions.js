@@ -113,23 +113,34 @@ export function logout() {
     };
 };
 
-export function updateEndpoint(value) {
+const fetchEndpointForPayload = (dispatch, endpoint) => {
+    const uri= {
+        [endpoints.ID]: '/api/id',
+        [endpoints.TIME]: '/api/time',
+        [endpoints.SYSINFO]: '/api/sysinfo',
+    }[endpoint];
+    if (uri === undefined) return;
+    fetch(uri, {
+        credentials: 'same-origin',
+    })
+        .then(checkApiError(dispatch))
+        .then((response) => response.json())
+        .then((json) => dispatch(setPayload(json, endpoint)))
+        .catch(catchApiError(dispatch, () => {
+            dispatch(setPayload('', endpoints.NONE));
+        }));
+};
+
+export function updateEndpoint(endpoint) {
     return (dispatch) => {
-        dispatch(setEndpointSelection(value));
-        const uri= {
-            [endpoints.ID]: '/api/id',
-            [endpoints.TIME]: '/api/time',
-            [endpoints.SYSINFO]: '/api/sysinfo',
-        }[value];
-        fetch(uri, {
-            credentials: 'same-origin',
-        })
-            .then(checkApiError(dispatch))
-            .then((response) => response.json())
-            .then((json) => dispatch(setPayload(json, value)))
-            .catch(catchApiError(dispatch, () => {
-                dispatch(setPayload('', endpoints.NONE));
-            }));
+        dispatch(setEndpointSelection(endpoint));
+        fetchEndpointForPayload(dispatch, endpoint);
+    };
+}
+
+export function reloadEndpoint(endpoint) {
+    return (dispatch) => {
+        fetchEndpointForPayload(dispatch, endpoint);
     };
 }
 
