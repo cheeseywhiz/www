@@ -138,7 +138,7 @@ export function updateEndpoint(endpoint) {
     };
 }
 
-export function reloadEndpoint(endpoint) {
+export function refreshEndpoint(endpoint) {
     return (dispatch) => {
         fetchEndpointForPayload(dispatch, endpoint);
     };

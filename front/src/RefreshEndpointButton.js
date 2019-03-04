@@ -8,9 +8,9 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    reloadEndpoint: (endpoint) => () => dispatch(actions.reloadEndpoint(endpoint)),
+    refreshEndpoint: (endpoint) => () => dispatch(actions.refreshEndpoint(endpoint)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-    ({endpoint, reloadEndpoint}) => <input type="button" value="Reload" onClick={reloadEndpoint(endpoint)} />
+    ({endpoint, refreshEndpoint}) => <input type="button" value="Refresh" onClick={refreshEndpoint(endpoint)} />
 );
