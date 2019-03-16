@@ -16,8 +16,9 @@ const getHumanReadable = (bytes, n_places = 2) => {
 
 export default connect(mapStateToProps)(
     ({payload}) => {
-        const {bufferram, sharedram, freeram, totalram} = payload;
+        const {bufferram, sharedram, freeram, totalram, totalswap, freeswap} = payload;
         const usedram = totalram - (bufferram, sharedram, freeram);
+        const usedswap = totalswap - freeswap;
         return <ul>
             <li>
                 Used RAM
@@ -47,6 +48,12 @@ export default connect(mapStateToProps)(
                 Total RAM
                 <ul>
                     <li>{getHumanReadable(totalram)}</li>
+                </ul>
+            </li>
+            <li>
+                Used Swap
+                <ul>
+                    <li>{getHumanReadable(usedswap)}</li>
                 </ul>
             </li>
             <li>
